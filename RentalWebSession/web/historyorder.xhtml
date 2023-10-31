@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>History Order</title>
+        
+        <f:metadata>
+            <f:event listener="#{StateManagedBean.verifyUserLogin()}" type="preRenderView"></f:event>
+        </f:metadata>
+        
+        <style>
+            .white-rounded-corner-box {
+                width: 95%; 
+                background-color: white; 
+                border-radius: 25px; 
+                padding: 10px; 
+                display: block; 
+                margin-left: auto; 
+                margin-right: auto;
+                text-align: center;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                History Order
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+            
+        </div>
+        
+        <p:tabMenu style="text-align: center;" activeIndex="3">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Manager Dashboard" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+            </p:tabMenu>
+        
+        <br/>
+        
+        <div class="white-rounded-corner-box">
+        <p:growl showDetail="true" globalOnly="true"/>
+        <h:form>
+        <p:dataTable value="#{OrderManagedBean.dataOrdersByUser}" var="order">
+            <p:column headerText="ID">
+                <p:outputLabel value="#{order.id}"/>
+            </p:column>
+            
+            <p:column headerText="Tanggal Mulai">
+                <p:outputLabel value="#{order.tanggalMulai}">
+                    <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                </p:outputLabel>
+            </p:column>
+            
+            <p:column headerText="Tanggal Selesai">
+                <p:outputLabel value="#{order.tanggalSelesai}">
+                    <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                </p:outputLabel>
+            </p:column>
+            
+            <p:column headerText="Mobil Rental">
+                <p:outputLabel value="#{order.productId.name}"/>
+            </p:column>
+            
+            <p:column headerText="Total Harga">
+                <p:outputLabel value="#{order.totalHarga}">
+                    <f:convertNumber pattern="#,###.00"/>
+                    <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                </p:outputLabel>
+            </p:column>
+            
+            <p:column headerText="Status">
+                <p:outputLabel value="#{order.status}"/>
+            </p:column>
+            
+            <p:column headerText="Aksi">
+                <p:commandButton value="Cancel" rendered="#{OrderManagedBean.checkIfOrderIsCancellable(order)}" action="#{OrderManagedBean.cancelOrder(order)}" ajax="false"></p:commandButton>                
+            </p:column>
+        </p:dataTable>
+        </h:form>
+        </div>
+    </h:body>
+</html>
+

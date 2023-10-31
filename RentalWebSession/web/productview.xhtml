@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Detail Produk</title>
+        
+        <f:metadata>
+            <f:event listener="#{ProductMB.verifyProductIsNotNull()}" type="preRenderView"></f:event>
+        </f:metadata>
+        
+        
+        <style>
+            table {
+                width: 60%;
+                margin-left: auto;
+                margin-right: auto;
+                border: 2px solid white;
+                border-radius: 25px;
+                background-color: white;
+            }
+
+            td {
+                width: 350px;
+                text-align: center;
+            }
+
+            h2 {
+                font-family: Helvetica;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        <!-- Unused.
+        <p:steps activeIndex="1" readonly="true" styleClass="custom">
+            <p:menuitem value="Katalog" url="products.xhtml"></p:menuitem>
+            <p:menuitem value="Detail Produk" url="productview.xhtml"></p:menuitem>
+            <p:menuitem value="Konfirmasi Order" url="#"></p:menuitem>
+        </p:steps>
+        -->
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                Detail Produk
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+        </div>
+
+        <p:tabMenu style="text-align: center;" activeIndex="15">
+            <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+            <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+            <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+            <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+            <p:menuitem value="Kelola Pegawai" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="Statistik" outcome="statistics" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+            <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+        </p:tabMenu>
+
+        <br/><br/>
+
+        <h:form>
+            <!--
+            <div style="text-align: center;">
+                <img src="images/#{ProductMB.prodImage}" width="250px" height="200px"></img>
+            </div>
+            -->
+            <p:growl showDetail="true" globalOnly="true"/>
+            <div style="text-align: center;">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <h1 style="font-family: Helvetica;">#{ProductMB.prodName}</h1>
+                            <img src="images/#{ProductMB.referImage}" width="250px" height="200px"></img>
+                        </td>
+                    </tr>
+
+                    <tr><td colspan="2"><p:separator/></td></tr>
+
+                    <tr>
+                        <td><h2>Seats</h2></td>
+                        <td><p:outputLabel value="#{ProductMB.referSeat}"/></td>
+                    </tr>
+
+                    <tr><td colspan="2"><p:separator/></td></tr>
+
+                    <tr>
+                        <td><h2>Transmission</h2></td>
+                        <td><p:outputLabel value="#{ProductMB.referTransmisi}"/></td>
+                    </tr>
+
+                    <tr><td colspan="2"><p:separator/></td></tr>
+
+                    <tr>
+                        <td><h2>Price</h2></td>
+                        <td><p:outputLabel value="#{ProductMB.referPrice}">
+                                <f:convertNumber pattern="#,###.00"/>
+                                <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                            </p:outputLabel> <span style="font-family: Helvetica; font-size: larger">/ day</span></td>
+                    </tr>
+
+                    <tr><td colspan="2"><p:separator/></td></tr>
+                    <tr>
+
+                        <td><h2>Tanggal Sewa</h2></td>
+                        <td><p:datePicker id="inputtanggalsewa" selectionMode="range" value="#{OrderManagedBean.date_range}" mindate="#{ProductMB.minDate}" disabledDates="#{ProductMB.invalidDates}" readonlyInput="true" required="true" requiredMessage="Tanggal sewa harus diisi!">
+                                
+                                <p:ajax event="dateSelect" update="totalharga" listener="#{OrderManagedBean.calculateTotal()}" partialSubmit="true"/>
+                                
+                            </p:datePicker><br/><br/>
+                            <h:message for="inputtanggalsewa" style="color: red; font-family: Helvetica;"/></td>
+                    </tr>
+
+                    <tr><td colspan="2"><p:separator/></td></tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <h2>Ketentuan dan Persyaratan</h2>
+
+                            <p:accordionPanel multiple="true" style="text-align: left;" activeIndex="0,1">
+                                <p:tab title="Ketentuan Rental">
+                                    <ul>
+                                        <li>Jumlah bahan bakar saat mobil dikembalikan harus sama dengan saat mobil diterima.</li>
+                                        <li>Mobil dapat digunakan selama 24 jam / hari</li>
+                                        <li>Rental hanya berlaku untuk area Bandung saja.</li>
+                                        <li>Kondisi mobil saat dikembalikan harus sama dengan saat mobil diterima, jika terjadi kerusakan,
+                                            maka akan dikenakan denda sesuai kerusakannya.</li>
+                                        <li>Keterlambatan dalam pengembalian mobil akan dikenakan denda sebesar 20% dari biaya sewa.</li>
+                                    </ul>
+                                </p:tab>
+
+                                <p:tab title="Persyaratan">
+                                    <ul>
+                                        <li>Rentang usia 18 - 75 tahun.</li>
+                                        <li>Surat Izin Mengemudi A / Izin Mengemudi Internasional</li>
+                                        <li>Kartu Tanda Penduduk / Passport</li>
+                                        <li>Uang deposit sebesar Rp 1.000.000,- (Satu Juta Rupiah) </li>
+                                    </ul>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </td>
+                    </tr>
+
+                    <tr><td colspan="2"><p:separator/></td></tr>
+
+                    <tr>
+                        <td><h2>Total Harga</h2></td>
+                        <td><h2>
+                                <p:outputLabel id="totalharga" value="#{OrderManagedBean.total_harga}" style="color: #0064d2;">
+                                    <f:convertNumber pattern="#,###.00"/>
+                                    <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                                </p:outputLabel></h2></td>
+
+                    </tr>
+                    <tr><td colspan="2"><p:separator/></td></tr>
+
+                    <tr>
+                        <td colspan="2" style="text-align: left; font-family: Helvetica;">* Dengan menekan tombol Order, anda berarti menyetujui semua ketentuan dan persyaratan yang ada.<br/><br/></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"><p:commandButton value="Order" action="#{OrderManagedBean.addOrder()}" ajax="false" style="width: 250px; height: 50px; font-size: x-large"></p:commandButton><br/><br/></td>
+                    </tr>
+                </table>
+            </div>
+        </h:form>
+
+
+    </h:body>
+</html>
+

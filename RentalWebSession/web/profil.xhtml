@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Profil</title>
+        
+        <f:metadata>
+            <f:event listener="#{StateManagedBean.verifyUserLogin()}" type="preRenderView"></f:event>
+        </f:metadata>
+        
+        <style>
+            .white-rounded-corner-box {
+                width: 95%; 
+                background-color: white; 
+                border-radius: 25px; 
+                padding: 10px; 
+                display: block; 
+                margin-left: auto; 
+                margin-right: auto;
+                text-align: center;
+            }
+            
+            table {
+                border: 2px solid black;
+                border-radius: 25px;
+            }
+            
+            td {
+                width: 250px;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                Profil
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+        </div>
+        
+        <p:tabMenu style="text-align: center;" activeIndex="10">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Manager Dashboard" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+        </p:tabMenu>
+        
+        
+        <p:growl showDetail="true" globalOnly="true"/>
+        <p:tabView dynamic="true" cache="false" activeIndex="#{StateManagedBean.profileActiveIndex}">
+            <p:tab title="Profil User">
+                <h:form>
+                <div class="white-rounded-corner-box">
+                
+                    <table style="margin-right: auto; margin-left: auto;">
+                        <tr>
+                            <td><h3>Username</h3></td>
+                            <td><p:outputLabel value="#{UserManagedBean.userUserName}"/></td>
+                        </tr>
+                        <tr><td colspan="2"><p:separator/></td></tr>
+                        <tr>
+                            <td><h3>Nama Lengkap</h3></td>
+                            <td><p:inputText value="#{UserManagedBean.userNamaLengkap}"/></td>
+                        </tr>
+                        <tr><td colspan="2"><p:separator/></td></tr>
+                        <tr>
+                            <td><h3>Alamat</h3></td>
+                            <td>
+                                <p:inputTextarea value="#{UserManagedBean.userAlamat}"/>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"><p:separator/></td></tr>
+                        <tr>
+                            <td><h3>Email</h3></td>
+                            <td><p:inputText id="inputupdatemail" value="#{UserManagedBean.userEmail}">
+                                    <f:validator validatorId="util.EmailValidator"/>
+                                </p:inputText><br/>
+                                <h:message for="inputupdatemail" style="color: red; font-family: Helvetica;"></h:message>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"><p:separator/></td></tr>
+                        <tr>
+                            <td><h3>Nomor HP</h3></td>
+                            <td><p:inputText id="updatenomor" value="#{UserManagedBean.userHp}" 
+                                             converterMessage="Isikan dengan angka!" 
+                                             validatorMessage="Isi nomor HP yang valid!">
+                                    <f:convertNumber pattern="####"/>
+                                    <f:validateLength minimum="10" maximum="13"/>
+                                </p:inputText><br/>
+                                <h:message for="updatenomor" style="color: red; font-family: Helvetica;"/>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"><p:separator/></td></tr>
+                        <tr>
+                            <td><h3>NIK</h3></td>
+                            <td>
+                                <p:inputText id="updatenik" value="#{UserManagedBean.userNik}" 
+                                             converterMessage="Isikan dengan angka!"
+                                             validatorMessage="Masukkan NIK yang valid!">
+                                    <f:convertNumber pattern="####"/>
+                                    <f:validateLength minimum="16" maximum="16"/>
+                                </p:inputText><br/>
+                                <h:message for="updatenik" style="color: red; font-family: Helvetica;"/>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"><p:separator/></td></tr>
+                        <tr>
+                            <td colspan="2"><br/><p:commandButton value="Update" action="#{UserManagedBean.updateUser()}" ajax="false"/><br/><br/></td>
+                        </tr>
+                        
+                </table>
+                <br/><br/>
+                </div>
+                </h:form>
+            </p:tab>
+            
+            <p:tab title="Change Password">
+                <div class="white-rounded-corner-box">
+                    <h:form>
+                        <p:growl showDetail="true" globalOnly="true"/>
+                    <table style="margin-left: auto; margin-right: auto;">
+                        <tr>
+                            <td><br/></td>
+                        </tr>
+                        <tr>
+                            <td>Old Password:</td>
+                            <td><p:password value="#{UserManagedBean.oldPass}"></p:password></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>New Password:</td>
+                            <td><p:password value="#{UserManagedBean.newPass}"></p:password></td>
+                        </tr>
+                        <tr>
+                            <td><br/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><p:commandButton value="Confirm" action="#{UserManagedBean.changePassword()}" ajax="false"/></td>
+                        </tr>
+                        <tr>
+                            <td><br/></td>
+                        </tr>
+                    </table>
+                    </h:form>
+                </div>
+            </p:tab>
+        </p:tabView>
+        
+    </h:body>
+</html>
+

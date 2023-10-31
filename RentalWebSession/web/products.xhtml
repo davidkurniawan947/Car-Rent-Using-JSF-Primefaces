@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Katalog</title>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                Daftar Produk
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+            
+        </div>
+        
+        <!--
+        <div style="text-align: center; height: 135px; background-color: buttonface;">
+            <br/>
+            <span style="font-size: 50px; font-family: Helvetica;">DAFTAR PRODUK</span>
+            <br/><br/>
+        -->
+        
+        
+        <!--
+            <p:tabMenu style="text-align: center;" activeIndex="1">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Products" outcome="products" ajax="false"></p:menuitem>
+            </p:tabMenu>
+            -->
+            
+            <p:tabMenu style="text-align: center;" activeIndex="1">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Kelola Pegawai" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="Statistik" outcome="statistics" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+            </p:tabMenu>
+        
+            
+            <!--
+        </div>
+        -->
+        
+        <br/>
+        <h:form>
+            <i class="pi pi-search" style="float: left; font-size: 2em;"></i>
+            
+            &nbsp;&nbsp;&nbsp; <p:inputText value="#{ProductMB.searchCarName}" placeholder="Nama Mobil" >
+            <p:ajax event="keyup" update="productspanel" listener="#{ProductMB.storeCarName()}"/>
+            </p:inputText> &nbsp;&nbsp;&nbsp;
+            
+            <span style="font-family: Helvetica;">Urutkan Harga:</span>&nbsp;
+            <p:selectOneMenu value="#{ProductMB.orderProductsByPrice}" >
+                <f:selectItem itemLabel="Harga Terendah" itemValue="ORDER BY p.price ASC">
+                </f:selectItem>
+                <f:selectItem itemLabel="Harga Tertinggi" itemValue="ORDER BY p.price DESC">
+                </f:selectItem>
+                <p:ajax update="productspanel" listener="#{ProductMB.storeCarName()}"/>
+            </p:selectOneMenu> &nbsp;&nbsp;&nbsp;
+            
+            <br/><br/>
+        </h:form>
+        <p:dataGrid id="productspanel" value="#{ProductMB.products}" var="car" columns="3" layout="grid" emptyMessage="Mobil tidak ditemukan, coba cek pengejaan pada kolom pencarian.">
+            <p:panel header="#{car.name}" style="text-align: center;">
+                <h:form>
+                <div style="text-align: left;">
+                    <div style="text-align: center;">
+                        <img src="images/#{car.image}" style="text-align: center;" height="200px" width="250px"></img><br/>
+                    </div>
+                    <p:separator/>    
+                    <i class="pi pi-user"></i>&nbsp;<h:outputText value="#{car.seat}"/>&nbsp;seats 
+                    &nbsp;<h:outputText value="#{car.transmisi}" style="float: right;"/><i class="pi pi-key" style="float: right;"></i> <br/>
+                
+                <br/>
+                &nbsp;<h:outputText value="#{car.price}" style="color: #0064d2; font-weight: bold; font-size: x-large;">
+                                    <f:convertNumber pattern="#,###.00"/>
+                                    <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                    </h:outputText> / day <br/>
+                
+                <br/>
+                <div style="text-align: center;">
+                    <p:commandButton value="Detail" action="#{ProductMB.referCar(car)}" ajax="false" rendered="#{UserManagedBean.validLogin}" style="width: 100%;"/>
+                </div>
+                </div>
+                </h:form>
+            </p:panel>
+        </p:dataGrid>
+        
+        <br/><br/>
+    </h:body>
+</html>
+

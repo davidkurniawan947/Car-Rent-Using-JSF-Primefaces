@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Data Produk</title>
+        
+        <f:metadata>
+            <f:event listener="#{StateManagedBean.verifyEmpLogin()}" type="preRenderView"></f:event>
+        </f:metadata>
+        
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                Product Master Data
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+        </div>
+        
+        <h:form>
+        <p:tabMenu style="text-align: center;" activeIndex="3">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Kelola Pegawai" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="Statistik" outcome="statistics" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+            </p:tabMenu>
+        </h:form>
+        
+        <p:tabView activeIndex="#{StateManagedBean.productActiveIndex}" dynamic="true" cache="false" >
+            <p:tab title="List Data">
+                <h:form>
+                <div>
+                    <p:growl showDetail="true" globalOnly="true"/>
+                    <p:dataTable value="#{ProductMB.listAllProd}" var="car" style="text-align: center;">
+                        <p:column headerText="ID">
+                            <p:outputLabel value="#{car.id}" style="text-align: center; font-size: 25px;"/>
+                        </p:column>
+                        
+                        <p:column headerText="Name">
+                            <p:outputLabel value="#{car.name}" style="text-align: center; font-size: 25px;"/>
+                        </p:column>
+                        
+                        <p:column headerText="Seat">
+                            <p:outputLabel value="#{car.seat}" style="text-align: center; font-size: 25px;"/>
+                        </p:column>
+                        
+                        <p:column headerText="Transmission">
+                            <p:outputLabel value="#{car.transmisi}" style="text-align: center; font-size: 25px;"/>
+                        </p:column>
+                        
+                        <p:column headerText="Plat">
+                            <p:outputLabel value="#{car.plat}" style="text-align: center; font-size: 25px;"/>
+                        </p:column>
+                        
+                        <p:column headerText="Price">
+                            <p:outputLabel value="#{car.price}" style="text-align: center; font-size: 25px;">
+                                <f:convertNumber pattern="#,###.00"/>
+                                <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                            </p:outputLabel>
+                        </p:column>
+                        
+                        <p:column headerText="Image">
+                            <img src="images/#{car.image}" width="150px" height="100px"></img>
+                        </p:column>
+                        
+                        <p:column headerText="Aksi">
+                            <p:commandButton value="Edit" action="#{ProductMB.searchCarByList(car)}" ajax="false"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+                </h:form>
+            </p:tab>
+            
+            <p:tab title="Search Car">
+                <div>
+                    <h:form enctype="multipart/form-data">
+                        <p:growl id="messages" showDetail="true"/>
+                        <h3>Enter ID:</h3>
+                        <p:inputText value="#{ProductMB.carid}" converterMessage="Silahkan isi kolom pencarian dengan angka!">
+                            <f:convertNumber pattern="####"/>
+                        </p:inputText> 
+                        <p:commandButton value="Search" action="#{ProductMB.searchCar()}" ajax="false">    
+                        </p:commandButton>
+
+                        <hr></hr>
+                        
+                        <h2>ID</h2>
+                        <p:outputLabel value="#{ProductMB.prodid}"/> <br/><br/>
+                        <hr/>
+                        <h2>Name</h2>
+                        <p:inputText value="#{ProductMB.prodName}"/> <br/><br/>
+                        <hr/>
+                        <h2>Seat</h2>
+                        <p:inputText value="#{ProductMB.prodSeat}"/> <br/><br/>
+                        <hr/>
+                        <h2>Transmisi</h2>
+                        <p:selectOneMenu value="#{ProductMB.prodTransmisi}">
+                            <f:selectItem itemLabel="Automatic" itemValue="Automatic"/>
+                            <f:selectItem itemLabel="Manual" itemValue="Manual"/>
+                        </p:selectOneMenu>
+                        <br/><br/>
+                        <hr/>
+                        <h2>Plat</h2>
+                        <p:inputText value="#{ProductMB.prodPlat}"/> <br/><br/>
+                        <hr/>
+                        <h2>Price / day</h2>
+                        <p:inputText value="#{ProductMB.prodPrice}"/> <br/><br/>
+                        <hr/>
+                        <h2>Image</h2>
+                        <img src="images/#{ProductMB.prodImage}" width="250px" height="200px"></img>
+                        <p:fileUpload value="#{ProductMB.imageFile}" rendered="#{ProductMB.carNotNull}" allowTypes="/(\.|\/)(gif|jpe?g|png)$/i" mode="simple"/>
+                        <br/><br/>
+                        <p:commandButton value="Save" action="#{ProductMB.updateCar()}" ajax="false" rendered="#{ProductMB.carNotNull}"/>
+                        <p:commandButton value="Remove" action="#{ProductMB.removeCar()}" ajax="false" rendered="#{ProductMB.carNotNull}"/>
+                    </h:form>
+                </div>
+            </p:tab>
+            
+            <p:tab title="Add Car">
+                <div>
+                    <h:form enctype="multipart/form-data" >
+                        <p:growl showDetail="true" globalOnly="true"/>
+                        <h3>Name:</h3>
+                        <p:inputText id="addnama" value="#{ProductMB.addName}"/> <br/><br/>
+                        <!-- <h:message for="addnama" style="color: red;"/> -->
+                        
+                        <h3>Seat:</h3>
+                        <p:inputText id="addseat" value="#{ProductMB.addSeat}"/> <br/><br/>
+                        <!--<h:message for="addseat" style="color: red;"/>-->
+                        
+                        <h3>Transmisi:</h3>
+                        <p:selectOneMenu value="#{ProductMB.addTransmisi}">
+                            <f:selectItem itemLabel="Automatic" itemValue="Automatic"/>
+                            <f:selectItem itemLabel="Manual" itemValue="Manual"/>
+                        </p:selectOneMenu>
+                        <br/><br/>
+                        <!--<h:message for="addtransmisi" style="color: red;"/>-->
+                        
+                        <h3>Plat:</h3>
+                        <p:inputText id="addplat" value="#{ProductMB.addPlat}"/> <br/><br/>
+                        
+                        <h3>Price:</h3>
+                        <p:inputText id="addprice" value="#{ProductMB.addPrice}"/> <br/><br/>
+                        <!--<h:message for="addprice" style="color: red;"/>-->
+                        
+                        <h3>Image:</h3>
+                        <p:fileUpload id="addimage" value="#{ProductMB.imageFile}" mode="simple"/> <br/><br/>
+                        <!--<h:message for="addimage" style="color: red;"/>-->
+                        
+                        <p:commandButton value="Add" action="#{ProductMB.addCar()}" ajax="false"/>
+                    </h:form>
+                </div>
+            </p:tab>
+        </p:tabView>
+    </h:body>
+</html>
+

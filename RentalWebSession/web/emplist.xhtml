@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Data Pegawai</title>
+        
+        <f:metadata>
+            <f:event listener="#{StateManagedBean.verifyEmpLogin()}" type="preRenderView"></f:event>
+        </f:metadata>
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                Data Pegawai
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+        </div>
+        
+        <p:tabMenu style="text-align: center;" activeIndex="4">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Kelola Pegawai" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="Statistik" outcome="statistics" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+            </p:tabMenu>
+        
+        <p:tabView activeIndex="#{StateManagedBean.empActiveIndex}" dynamic="true" cache="false">
+            <p:tab title="List Employees">
+                <p:growl showDetail="true" globalOnly="true"/>
+                <p:dataTable value="#{EmployeeManagedBean.listEmp}" var="emp">
+                    <p:column headerText="ID">
+                        <p:outputLabel value="#{emp.id}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Username">
+                        <p:outputLabel value="#{emp.username}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Job">
+                        <p:outputLabel value="#{emp.job}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+            
+            <p:tab title="Search Employee">
+                <h:form>
+                    <p:growl showDetail="true" globalOnly="true" />
+                <p:inputText value="#{EmployeeManagedBean.empIdSearch}"/> &nbsp; <p:commandButton value="Search" action="#{EmployeeManagedBean.searchEmp()}" ajax="false"/>
+                <hr/>
+                
+                <h4>ID</h4>
+                <p:outputLabel value="#{EmployeeManagedBean.empId}"/>
+                
+                <h4>Username</h4>
+                <p:outputLabel value="#{EmployeeManagedBean.empUsername}"/>
+                
+                <h4>Job</h4>
+                <p:selectOneMenu value="#{EmployeeManagedBean.empJobDesc}">
+                    <f:selectItem itemLabel="Employee" itemValue="Employee"/>
+                    <f:selectItem itemLabel="Manager" itemValue="Manager"/>
+                </p:selectOneMenu>
+                
+                <br/><br/>
+                
+                <p:commandButton value="Save" action="#{EmployeeManagedBean.updateEmp()}" ajax="false"/>
+                <p:commandButton value="Remove" action="#{EmployeeManagedBean.removeEmp()}" ajax="false"/>
+                </h:form>
+            </p:tab>
+            
+            <p:tab title="Add Employee">
+                <h:form>
+                <p:growl showDetail="true" globalOnly="true"/>
+                
+                <h4>Username</h4>
+                <p:inputText value="#{EmployeeManagedBean.addUsername}"/>
+                
+                <h4>Password</h4>
+                <p:inputText value="#{EmployeeManagedBean.addPassword}"/>
+                
+                <h4>Position</h4>
+                <p:selectOneMenu value="#{EmployeeManagedBean.addJob}">
+                    <f:selectItem itemLabel="Employee" itemValue="Employee"/>
+                    <f:selectItem itemLabel="Manager" itemValue="Manager"/>
+                </p:selectOneMenu>
+                <br/><br/>
+                
+                <p:commandButton value="Add" action="#{EmployeeManagedBean.addEmployee()}" ajax="false"/>
+                </h:form>
+            </p:tab>
+            
+            <p:tab title="Change Emp. Password">
+                <h:form>
+                    <p:growl showDetail="true" globalOnly="true"/>
+                    
+                    <p:inputText value="#{EmployeeManagedBean.searchEmpPassId}" converterMessage="Isi dengan angka!">
+                        <f:convertNumber pattern="####"/>
+                    </p:inputText> &nbsp;&nbsp; <p:commandButton value="Search" action="#{EmployeeManagedBean.searchChangePassEmployee()}" ajax="false"/>
+                    
+                    <p:separator/>
+                    
+                    <h3>ID</h3>
+                    <p:outputLabel value="#{EmployeeManagedBean.empPassId}"/><br/>
+                    
+                    <h3>Username</h3>
+                    <p:outputLabel value="#{EmployeeManagedBean.empPassUsername}"/><br/>
+                    
+                    <h3>New Password</h3>
+                    <p:inputText value="#{EmployeeManagedBean.empNewPassword}"/><br/><br/>
+                    
+                    <p:commandButton value="Confirm" action="#{EmployeeManagedBean.changePassword()}" ajax="false" rendered="#{EmployeeManagedBean.validEmp}"/>
+                </h:form>
+            </p:tab>
+        </p:tabView>
+        
+    </h:body>
+</html>
+

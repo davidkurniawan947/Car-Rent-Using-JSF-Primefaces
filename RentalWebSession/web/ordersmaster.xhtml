@@ -1,0 +1,325 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Data Transaksi</title>
+        
+        <f:metadata>
+            <f:event listener="#{StateManagedBean.verifyEmpLogin()}" type="preRenderView"></f:event>
+        </f:metadata>
+        
+        <style>
+            table {
+                margin-left: auto;
+                margin-right: auto;
+                border: 2px solid black;
+                border-radius: 25px;
+            }
+            
+            td.wrapper {
+                height: 700px;
+                width: 33%;
+                padding: 50px;
+            }
+        </style>
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                Data Transaksi
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+        </div>
+        
+        <p:tabMenu style="text-align: center;" activeIndex="3">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Kelola Pegawai" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="Statistik" outcome="statistics" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+            </p:tabMenu>
+        
+        <p:growl showDetail="true" globalOnly="true"/>
+        <p:tabView id="parenttab" dynamic="true" cache="false" activeIndex="1">
+            <p:tab title="List Orders">
+                <p:tabView orientation="left" dynamic="true" cache="false">
+                    <p:tab title="Status: PENDING">
+                        <h:form>
+                        <div style="text-align: center;">
+                            <p:dataTable value="#{OrderManagedBean.listPendingOrders}" var="PendingOrder">
+                                <p:column headerText="ID">
+                                    <p:outputLabel value="#{PendingOrder.id}"/>
+                                </p:column>
+
+                                <p:column headerText="Tanggal Mulai">
+                                    <p:outputLabel value="#{PendingOrder.tanggalMulai}">
+                                        <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Tanggal Selesai">
+                                    <p:outputLabel value="#{PendingOrder.tanggalSelesai}">
+                                        <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Mobil">
+                                    <p:outputLabel value="#{PendingOrder.productId.id} - #{PendingOrder.productId.name}"/>
+                                </p:column>
+
+                                <p:column headerText="Penyewa">
+                                    <p:outputLabel value="#{PendingOrder.userId.id} - #{PendingOrder.userId.namaLengkap}"/>
+                                </p:column>
+
+                                <p:column headerText="Total Harga">
+                                    <p:outputLabel value="#{PendingOrder.totalHarga}">
+                                        <f:convertNumber pattern="#,###.00"/>
+                                        <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Status">
+                                    <p:outputLabel value="#{PendingOrder.status}"/>
+                                </p:column>
+                                
+                                <p:column headerText="Aksi">
+                                    <p:commandButton value="Detail" action="#{OrderManagedBean.searchOrderFromList(PendingOrder)}" ajax="false"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                        </h:form>
+                    </p:tab>
+                    
+                    <p:tab title="Status: CONFIRMED">
+                        <h:form>
+                            
+                            
+                        <div style="text-align: center;">
+                            <p:dataTable value="#{OrderManagedBean.listConfirmedOrders}" var="ConfirmedOrder">
+                                <p:column headerText="ID">
+                                    <p:outputLabel value="#{ConfirmedOrder.id}"/>
+                                </p:column>
+
+                                <p:column headerText="Tanggal Mulai">
+                                    <p:outputLabel value="#{ConfirmedOrder.tanggalMulai}">
+                                        <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Tanggal Selesai">
+                                    <p:outputLabel value="#{ConfirmedOrder.tanggalSelesai}">
+                                        <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Mobil">
+                                    <p:outputLabel value="#{ConfirmedOrder.productId.id} - #{ConfirmedOrder.productId.name}"/>
+                                </p:column>
+
+                                <p:column headerText="Penyewa">
+                                    <p:outputLabel value="#{ConfirmedOrder.userId.id} - #{ConfirmedOrder.userId.namaLengkap}"/>
+                                </p:column>
+
+                                <p:column headerText="Total Harga">
+                                    <p:outputLabel value="#{ConfirmedOrder.totalHarga}">
+                                        <f:convertNumber pattern="#,###.00"/>
+                                        <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Status">
+                                    <p:outputLabel value="#{ConfirmedOrder.status}"/>
+                                </p:column>
+                                
+                                <p:column headerText="Aksi">
+                                    <p:commandButton value="Detail" action="#{OrderManagedBean.searchOrderFromList(ConfirmedOrder)}" ajax="false"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                        </h:form>
+                    </p:tab>
+                    
+                    <p:tab title="Status: COMPLETED">
+                        <h:form>
+                        <div style="text-align: center;">
+                            <p:dataTable value="#{OrderManagedBean.listCompletedOrders}" var="CompletedOrder">
+                                <p:column headerText="ID">
+                                    <p:outputLabel value="#{CompletedOrder.id}"/>
+                                </p:column>
+
+                                <p:column headerText="Tanggal Mulai">
+                                    <p:outputLabel value="#{CompletedOrder.tanggalMulai}">
+                                        <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Tanggal Selesai">
+                                    <p:outputLabel value="#{CompletedOrder.tanggalSelesai}">
+                                        <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Mobil">
+                                    <p:outputLabel value="#{CompletedOrder.productId.id} - #{CompletedOrder.productId.name}"/>
+                                </p:column>
+
+                                <p:column headerText="Penyewa">
+                                    <p:outputLabel value="#{CompletedOrder.userId.id} - #{CompletedOrder.userId.namaLengkap}"/>
+                                </p:column>
+
+                                <p:column headerText="Total Harga">
+                                    <p:outputLabel value="#{CompletedOrder.totalHarga}">
+                                        <f:convertNumber pattern="#,###.00"/>
+                                        <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                                    </p:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="Status">
+                                    <p:outputLabel value="#{CompletedOrder.status}"/>
+                                </p:column>
+                                
+                                <p:column headerText="Aksi">
+                                    <p:commandButton value="Detail" action="#{OrderManagedBean.searchOrderFromList(CompletedOrder)}" ajax="false"/>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                        </h:form>
+                    </p:tab>
+                </p:tabView>
+            </p:tab>
+            
+            <p:tab id="childtab" title="Konfirmasi Order">
+                <h:form id="orderform">
+                    
+                    <table id="ordertable" rules="cols">
+                        <th><br/>Data Order <br/><p:separator/></th>
+                        <th><br/>Data Produk <br/><p:separator/></th>
+                        <th><br/>Data User <br/><p:separator/></th>
+                        
+                        <tr>
+                            <td class="wrapper">
+                                <div>
+                                    
+                                <h4>Enter Order ID:</h4>
+                                <p:inputText value="#{OrderManagedBean.searchOrderId}"/> &nbsp; <p:commandButton value="Search" action="#{OrderManagedBean.searchOrder()}" ajax="false"/>
+                                <hr></hr>
+
+                                <h4>Order ID:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderId}"/><br/><br/>
+
+                                <h4>Tanggal Mulai:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderStartDate}">
+                                    <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                                </p:outputLabel><br/><br/>
+
+                                <h4>Tanggal Selesai:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderEndDate}">
+                                    <f:convertDateTime pattern="EEEEEEEE, dd/MMM/YYYY"/>
+                                </p:outputLabel><br/><br/>
+                                
+                                <h4>Durasi:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderDurasi} hari">
+                                </p:outputLabel><br/><br/>
+                                
+                                <h4>Total Harga:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderTotalHarga}">
+                                    <f:convertNumber pattern="#,###.00"/>
+                                    <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                                </p:outputLabel><br/><br/>
+                                
+                                <h4>Status:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderStatus}"/><br/><br/>
+                            </div>
+                            </td>
+                            <td class="wrapper">
+                                <div>
+                                    <div style="text-align: center;">
+                                    <img src="images/#{OrderManagedBean.orderProductId.image}" width="150px" height="100px"></img><br/><br/>
+                                    </div>
+                                <h4>ID Mobil:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderProductId.id}"/><br/><br/>
+                                
+                                <h4>Nama:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderProductId.name}"/><br/><br/>
+                                
+                                <h4>Seat:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderProductId.seat}"/><br/><br/>
+                                
+                                <h4>Transmisi:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderProductId.transmisi}"/><br/><br/>
+                                
+                                <h4>Plat:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderProductId.plat}"/><br/><br/>
+                                
+                                <h4>Price / day:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderProductId.price}">
+                                    <f:convertNumber pattern="#,###.00"/>
+                                    <f:convertNumber type="currency" currencySymbol="Rp. "/>
+                                </p:outputLabel><br/><br/>
+                            </div>
+                            </td>
+                            <td class="wrapper">
+                                <div>
+                                <h4>ID User:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderUserId.id}"/><br/><br/>
+                                
+                                <h4>Username:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderUserId.username}"/><br/><br/>
+                                
+                                <h4>Nama Lengkap:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderUserId.namaLengkap}"/><br/><br/>
+                                
+                                <h4>Alamat:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderUserId.alamat}"/><br/><br/>
+                                
+                                <h4>Email:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderUserId.email}"/><br/><br/>
+                                
+                                <h4>Nomor Telepon:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderUserId.noHp}"/><br/><br/>
+                                
+                                <h4>NIK:</h4>
+                                <p:outputLabel value="#{OrderManagedBean.orderUserId.nik}"/><br/><br/>
+                            </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <p:separator/>
+                                &nbsp;&nbsp;<span style="font-family: Helvetica; font-size: x-large">Confirmed by: </span><p:outputLabel value="#{OrderManagedBean.confirmEmployee}"/><br/>
+                                &nbsp;&nbsp;<span style="font-family: Helvetica; font-size: x-large">Completed by: </span><p:outputLabel value="#{OrderManagedBean.completeEmployee}"/><br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: center;">
+                                <p:separator/>
+                                <p:commandButton value="Confirm Order" action="#{OrderManagedBean.confirmOrder()}" ajax="false" rendered="#{OrderManagedBean.notConfirmed}"/> &nbsp;
+                                <p:commandButton value="Complete Order" action="#{OrderManagedBean.completeOrder()}" ajax="false" rendered="#{OrderManagedBean.confirmed}"/> &nbsp;
+                                <p:commandButton value="Cancel Order" action="#{OrderManagedBean.cancelOrderByEmployee()}" ajax="false" rendered="#{OrderManagedBean.cancellable}"/> &nbsp;
+                                <p:commandButton value="Delete Order" action="#{OrderManagedBean.deleteOrder()}" ajax="false" rendered="#{OrderManagedBean.deletable}"/>
+                                <br/><br/>
+                            </td>
+                        </tr>
+                    </table>
+                </h:form>  
+            </p:tab>
+        </p:tabView>
+    </h:body>
+</html>
+

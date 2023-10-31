@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Login</title>
+    </h:head>
+    <h:body>
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 330px; font-size: 50px; font-family: Helvetica;">
+                Login
+            </span>
+        </div>
+        
+
+            <div class="form-container" style="text-align: center;" >
+            <h:form class="form">
+                <p:growl showDetail="true" globalOnly="true"/>
+                    <div class="form-content">
+                        <div class="form-input">
+                            <p:inputText id="inputnama" value="#{UserManagedBean.tempUser}" placeholder="Username"
+                                         required="true"
+                                         requiredMessage="Username is required!"> </p:inputText><br></br>
+                            <h:message for="inputnama" style="font-family: arial; font-size: small; color: red;"/><br/>
+                        </div>
+                        
+                        <div class="form-input">
+                            <p:password id="inputpassword" value="#{UserManagedBean.tempPass}" placeholder="Password"
+                                         required="true"
+                                         requiredMessage="Password is required!"> </p:password><br></br>
+                            <h:message for="inputpassword" style="font-family: arial; font-size: small; color: red;"/><br/>
+                        </div>
+                        
+                        <p:commandButton id="loginbutton" value="Login" action="#{UserManagedBean.login()}" ajax="false"/>
+                        <h:message for="loginbutton"/>
+                        
+                        <div id="sign-in" style="margin-left: 5px; font-family: arial; font-size: small; padding-top: 10px">
+                            <label>Not a member? <a href="register.xhtml">Register</a></label>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+
+        
+        <style>
+            body {
+                background-image: url("mobilrentall.jpg"); 
+                height: 600px;
+            }
+            .main-form{    
+                padding-top: 70px;
+               
+            }
+
+            .form-container{
+                background-color: white;
+                border-top: 3px solid #E96729;
+                border-bottom: 1px solid black;
+                border-left: 1px solid white;
+                border-right: 1px solid white;
+                box-shadow: 0px 0px 1px 3px #F0F0F0;
+                float: left;
+                padding-top:40px;
+                padding-left: 20px;
+                padding-right: 20px;
+                padding-bottom: 40px;
+                position: absolute;
+                width: 300px;
+                height: 200px;
+                left: 50%;
+                transform: translateX(-50%);
+
+                #confrim-btn{
+                border: 0px;
+                padding: 8px;
+                width: 490px;
+                color: white;
+                background-color: #E96729;
+                cursor: pointer;
+            }
+
+            #confrim-btn:hover{
+                background-color: orange;
+            }
+
+            .form-content{
+                margin-left: 55px;
+            }
+            
+            }
+        </style>
+    </h:body>
+</html>
+

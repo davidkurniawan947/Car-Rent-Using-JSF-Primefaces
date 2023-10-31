@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Data Konsumen</title>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <f:metadata>
+            <f:event listener="#{StateManagedBean.verifyEmpLogin()}" type="preRenderView"></f:event>
+        </f:metadata>
+        
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                Customer Master Data
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+        </div>
+        
+        <p:tabMenu style="text-align: center;" activeIndex="3">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Kelola Pegawai" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="Statistik" outcome="statistics" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+            </p:tabMenu>
+        
+        <p:tabView id="tabviewlistuser" dynamic="true" cache="false" activeIndex="1">
+            <p:tab id="tablistuser" title="List User">
+                <h:form id="userform">
+                <i class="pi pi-search" style="float: left; font-size: 1.5em;"></i>
+                &nbsp;
+                <p:inputText value="#{UserManagedBean.searchByName}">
+                    <p:ajax event="keyup" update="userdatatable" listener="#{UserManagedBean.printValue()}"/>
+                </p:inputText><br/><br/>
+                
+                <!--<h:form id="userform">-->
+                    <!--<div>-->
+                        <p:dataTable  id="userdatatable" value="#{UserManagedBean.listUsers}" var="user" style="text-align: center;">
+
+                            <p:column headerText="ID">
+                                <p:outputLabel value="#{user.id}"/>
+                            </p:column>
+
+                            <p:column headerText="Username">
+                                <p:outputLabel value="#{user.username}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Nama Lengkap">
+                                <p:outputLabel value="#{user.namaLengkap}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Alamat">
+                                <p:outputLabel value="#{user.alamat}"/>
+                            </p:column>
+
+                            <p:column headerText="Email">
+                                <p:outputLabel value="#{user.email}"/>
+                            </p:column>
+
+                            <p:column headerText="Nomor HP">
+                                <p:outputLabel value="#{user.noHp}"/>
+                            </p:column>
+
+                            <p:column headerText="NIK">
+                                <p:outputLabel value="#{user.nik}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                   <!-- </div> -->
+                <!--</h:form>-->
+            </p:tab>
+            
+            <p:tab title="Search User">
+                <h:form>
+                    <p:growl showDetail="true" globalOnly="true"/>
+                    <div>
+                        <h3>Enter Customer's ID: </h3>
+                        <p:inputText id="inputcustomerid" value="#{UserManagedBean.userId}" converterMessage="Isi kolom pencarian dengan angka!">
+                            <f:convertNumber pattern="####"/>
+                        </p:inputText> <p:commandButton value="Search" action="#{UserManagedBean.checkUser()}" ajax="false"/><br/>
+                        <h:message for="inputcustomerid" style="color: red; font-family: Helvetica;"/>
+                        <hr></hr>
+                        
+                        <h3>ID:</h3>
+                        <p:outputLabel value="#{UserManagedBean.userUserId}"/> <br/><br/>
+                        
+                        <h3>Username:</h3>
+                        <p:outputLabel value="#{UserManagedBean.searchUserUsername}"/> <br/><br/>
+                        
+                        <h3>Nama Lengkap:</h3>
+                        <p:inputText value="#{UserManagedBean.searchUserNamaLengkap}" style="width: 350px;"/> <br/><br/>
+                        
+                        <h3>Alamat:</h3>
+                        <p:inputTextarea value="#{UserManagedBean.searchUserAlamat}" style="width: 350px;"></p:inputTextarea><br/><br/>
+                        
+                        <h3>Email:</h3>
+                        <p:inputText id="updateEmailByEmployee" value="#{UserManagedBean.searchUserEmail}" style="width: 350px;">
+                            <!--<f:validator validatorId="util.EmailValidator"/>-->
+                        </p:inputText><br/>
+                        <h:message for="updateEmailByEmployee" style="color: red; font-family: Helvetica;"/>
+                        <br/>
+                        
+                        <h3>Nomor HP:</h3>
+                        <p:inputText id="updatehpbyemployee" value="#{UserManagedBean.searchUserNoHp}" 
+                                     converterMessage="Isikan dengan angka!"
+                                     validatorMessage="Masukkan nomor HP yang valid!" style="width: 350px;">
+                            <f:convertNumber pattern="####"/>
+                            <f:validateLength minimum="10" maximum="13"/>
+                        </p:inputText><br/>
+                        <h:message for="updatehpbyemployee" style="color: red; font-family: Helvetica"/>
+                        
+                        <br/>
+                        
+                        <h3>NIK:</h3>
+                        <p:inputText id="updatenikbyemployee" value="#{UserManagedBean.searchUserNik}" 
+                                     converterMessage="Isikan dengan angka!" validatorMessage="Masukkan NIK yang valid!" style="width: 350px;">
+                            <f:convertNumber pattern="####"/>
+                            <f:validateLength minimum="16" maximum="16"/>
+                        </p:inputText><br/>
+                        <h:message for="updatenikbyemployee" style="color: red; font-family: Helvetica"/>
+                        <br/><br/>
+                        
+                        <p:commandButton value="Save" action="#{UserManagedBean.updateUserByEmployee()}" ajax="false"/> &nbsp;
+                        <p:commandButton value="Remove" action="#{UserManagedBean.removeUser()}" ajax="false"/>
+                    </div>
+                </h:form>
+            </p:tab>
+        </p:tabView>
+    </h:body>
+</html>
+

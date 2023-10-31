@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Rental</title>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 100px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+            
+            <br/><br/>
+            <p:tabMenu style="text-align: center;" activeIndex="0">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Kelola Pegawai" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="Statistik" outcome="statistics" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+        </p:tabMenu>
+        </div>
+        
+        <br/><br/><br/><br/>
+        
+        <div class="card" style="height: 350px; background-color: buttonface;">
+            <p:carousel circular="true" autoPlayInterval="4000" itemStyle="border: none;" style="border: none;">
+
+            <p:tab>
+                <p class="m-0 p-3">
+                    <img src="icon/1.png" width="300%"></img>
+                </p>
+            </p:tab>
+            <p:tab></p:tab><p:tab></p:tab>
+            
+            <p:tab>
+                <p class="m-0 p-3">
+                    <img src="icon/2.png" width="300%"></img>
+                </p>
+            </p:tab>
+            <p:tab></p:tab><p:tab></p:tab>
+            
+            <p:tab>
+                <p class="m-0 p-3">
+                    <img src="icon/3.png" width="300%"></img>
+                </p>
+            </p:tab>
+            <p:tab></p:tab><p:tab></p:tab>
+            
+            <p:tab>
+                <p class="m-0 p-3">
+                    <img src="icon/4.png" width="300%"></img>
+                </p>
+            </p:tab>
+            <p:tab></p:tab><p:tab></p:tab>
+            
+            <p:tab>
+                <p class="m-0 p-3">
+                    <img src="icon/5.png" width="300%"></img>
+                </p>
+            </p:tab>
+            </p:carousel>
+        </div>
+        <br/><br/><br/><br/>
+        
+        <div class="container-bottom" style="padding-top: 220px; margin-left: -10px">  
+        <div style="background-color: white; height: 650px; text-align: center;">
+            <br/><br/>
+            <span style="font-size: 50px; color: black; font-family: Bahnschrift;">Rental Mobil Tidak Pernah Semudah Ini</span> <br/><br/>
+            
+            <div class="image" style="margin-top: 10px; margin-bottom: 30px">
+                <img src="icon/daihatsu.png" class="image-container"></img>
+                <img src="icon/honda.png" class="image-container"></img>
+                <img src="icon/toyota.png" class="image-container"></img>
+                <img src="icon/isuzu.png" class="image-container"></img>
+                <img src="icon/mitshubisi.png" style="width: 50px; height: 40px; padding-right: 30px;"></img>
+                <img src="icon/suzuki.png" style="width: 50px; height: 40px; padding-right: 30px;"></img>
+            </div>
+            
+            <style>
+                .image-container {
+                  width: 70px;
+                  height: 40px;
+                  padding-right: 30px;
+                };
+                
+            </style>
+            
+            <img src="icon/mobil-daihatsu.png" width="75%"></img>
+        </div>
+        </div>
+        <br></br>
+        
+        <style>
+            .site-footer{
+              background-color:#26272b;
+              padding:45px 0 20px;
+              font-size:15px;
+              line-height:24px;
+              color:#737373;
+            }
+            .site-footer hr{
+              border-top-color:#bbb;
+              opacity:0.5
+            }
+            .site-footer hr.small{
+              margin:20px 0
+            }
+            .site-footer h6{
+              color:#fff;
+              font-size:16px;
+              text-transform:uppercase;
+              margin-top:5px;
+              letter-spacing:2px
+            }
+            .site-footer a{
+              color:#737373;
+            }
+            .site-footer a:hover{
+              color:#3366cc;
+              text-decoration:none;
+            }
+        </style>
+        
+          <!-- Site footer -->
+            <footer class="site-footer" style="margin-left: -10px; padding-left: 20px; margin-top: 100px">
+              <div class="container">
+                <div class="row">
+                  <div class="col-sm-12 col-md-6">
+                    <h6>About</h6>
+                    <p class="text-justify">Tempat Penyewaan Mobil Terbaik No.1 se-Indonesia</p>
+                  </div>
+                </div>
+                  <hr></hr>
+              </div>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-8 col-sm-6 col-xs-12">
+                    <p class="copyright-text">Copyright &copy; 2023 All Rights Reserved by CarsRental</p>
+                  </div>
+                </div>
+              </div>
+        </footer>
+        
+    </h:body>
+</html>

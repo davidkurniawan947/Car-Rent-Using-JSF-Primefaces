@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Bantuan</title>
+        
+        <style>
+            .white-rounded-corner-box {
+                width: 95%; 
+                background-color: white; 
+                border-radius: 25px; 
+                padding: 10px; 
+                display: block; 
+                margin-left: auto; 
+                margin-right: auto;
+            }
+        </style>
+        
+    </h:head>
+    <h:body style="background-color: buttonface;">
+        
+        <div style=" background-color: buttonface; height: 135px; margin-left: -20px;margin-right: -20px;margin-top: -28px;margin-bottom: 30px;">
+            <br/>
+            <a href="index.xhtml"><img src="icon/rent-logo3.png" width="200px" height="60px" style="text-align: left; margin-left: 50px;margin-top: 25px;"/></a>
+            <span style="text-align: center; margin-left: 290px; font-size: 50px; font-family: Helvetica;">
+                Bantuan
+            </span>
+            
+            <h:form>
+                <p:commandButton value="Login"  rendered="#{StateManagedBean.notLogin}" style="float: right;" action="login" ajax="false"></p:commandButton>
+                <p:commandButton value="Logout" rendered="#{StateManagedBean.isUser}" style="float: right;" action="#{UserManagedBean.logout()}" ajax="false"></p:commandButton>
+            <p:commandButton value="Register" style="float: right;" rendered="#{StateManagedBean.notLogin}" action="register" ajax="false"></p:commandButton>
+            <p:commandButton value="Profil" style="float: right;"  rendered="#{StateManagedBean.isUser}" action="profil" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Login" style="float: right;" action="emplogin" rendered="#{StateManagedBean.notLogin}" ajax="false"></p:commandButton>
+            <p:commandButton value="Employee Logout" style="float: right;" action="#{EmployeeManagedBean.logout()}" rendered="#{StateManagedBean.isEmployee}" ajax="false"></p:commandButton>
+            </h:form>
+            
+        </div>
+        
+        <p:tabMenu style="text-align: center;" activeIndex="2">
+                <p:menuitem value="Home" outcome="index" ajax="false"></p:menuitem>
+                <p:menuitem value="Katalog" outcome="products" ajax="false"></p:menuitem>
+                <p:menuitem value="Bantuan" outcome="bantuan" ajax="false"></p:menuitem>
+                <p:menuitem value="Employee Dashboard" outcome="empdashboard" rendered="#{EmployeeManagedBean.validLogin}" ajax="false"></p:menuitem>
+                <p:menuitem value="Kelola Pegawai" outcome="emplist" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="Statistik" outcome="statistics" rendered="#{EmployeeManagedBean.manager}" ajax="false"></p:menuitem>
+                <p:menuitem value="History Order" outcome="historyorder" rendered="#{StateManagedBean.isUser}" ajax="false"></p:menuitem>
+            </p:tabMenu>
+        
+        <br/>
+        
+        <div class="white-rounded-corner-box">
+            
+        <div style="text-align: center;">
+            <h1 style="font-family: Helvetica;">Frequently Asked Questions</h1>
+        </div>
+        
+        <br/>
+        
+        <p:accordionPanel multiple="true">
+            <p:tab title="Bagaimana cara menyewa mobil?">
+                
+                <ol>
+                    <b>
+                    <li>Jika anda belum memiliki akun, silahkan melakukan <b><a href="register.xhtml">registrasi</a></b> terlebih dahulu. <br/><br/></li>
+                    <li><b><a href="login.xhtml">Login</a></b> dengan username dan password yang telah dibuat.<br/><br/></li>
+                    <li>Tab <b><a href="products.xhtml">Katalog</a></b> menunjukkan daftar kendaraan yang bisa anda sewa.<br/><br/></li>
+                    <li>Tekan "Detail" untuk melihat detail produk lalu isi tanggal sewa yang anda inginkan dan lanjut tekan "Order".<br/><br/></li>
+                    <li>Di tab "History Order", anda akan melihat ID order yang baru saja anda buat.<br/><br/></li>
+                    <li>Silahkan datang ke kantor kami untuk mengkonfirmasi order rental dan mengambil kendaraan anda.<br/><br/></li>
+                    </b>
+                </ol>
+                              
+            </p:tab>
+            
+            <p:tab title="Persyaratan apa saja yang harus dipenuhi?">
+                Persyaratan yang harus dipenuhi antara lain: <br/>
+                
+                <ul>
+                    <b>
+                    <li> Rentang usia mulai dari 18 - 75 tahun</li> <br/>
+                    <li> Kartu Tanda Penduduk / Passport</li> <br/>
+                    <li> Surat Izin Mengemudi A / Izin Mengemudi Internasional</li> <br/>
+                    <li> Uang deposit sebesar Rp 1.000.000,- </li> <br/>
+                    </b>
+                </ul>
+            </p:tab>
+            
+            <p:tab title="Apa saja ketentuan yang harus diperhatikan?">
+                <ul>
+                    <b>
+                    <li>Kondisi mobil saat dikembalikan harus sama saat kendaraan disewa. Jika terjadi kerusakan, maka akan dikenakan denda.<br/><br/></li>
+                    <li>Jumlah bahan bakar saat dikembalikan sama dengan kondisi saaat kendaraan disewa.<br/><br/></li>
+                    <li>Rental kendaraan hanya berlaku untuk kawasan Bandung saja.<br/><br/></li>
+                    </b>
+                </ul>
+            </p:tab>
+            
+        </p:accordionPanel>
+        
+        </div>
+    </h:body>
+</html>
+
